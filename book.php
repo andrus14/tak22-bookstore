@@ -8,7 +8,8 @@ $stmt = $pdo->prepare('SELECT * FROM books WHERE id = :id');
 $stmt->execute(['id' => $id]);
 $book = $stmt->fetch();
 
-var_dump($book);
+$stmt = $pdo->prepare('SELECT * FROM book_authors ba LEFT JOIN authors a ON ba.author_id=a.id WHERE book_id = :id');
+$stmt->execute(['id' => $id]);
 
 ?>
 
@@ -22,5 +23,26 @@ var_dump($book);
 <body>
     <h1><?= $book['title']; ?></h1>
     <span style="font-size: 24px;">Aasta</span> <span style="font-size: 32px"><?= $book['release_date']; ?></span>
+    <br><br>
+    <span style="font-size: 24px;">Autorid</span>
+    
+    <ul>
+
+        <?php
+        while ($row = $stmt->fetch()) {
+        ?>
+
+
+            <li>
+                <?= $row['first_name']; ?> <?= $row['last_name']; ?>
+            </li>
+
+        <?php
+        }
+        ?>
+    </ul>
+
+    <a href="./edit.php?id=<?= $book['id']; ?>">Muuda</a>
+
 </body>
 </html>
